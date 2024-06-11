@@ -1,0 +1,34 @@
+<template>
+    <button :class="buttonClass" @click="onClick">
+      <slot>Button Text</slot>
+    </button>
+  </template>
+  
+  <script>
+  export default {
+    name: 'CustomButton',
+    props: {
+      buttonClass: {
+        type: String,
+        default: 'btn'
+      },
+      onClick: Function
+    }
+  }
+  </script>
+  
+  <style scoped>
+  .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+  }
+
+  </style>
