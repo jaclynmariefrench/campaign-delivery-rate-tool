@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -14,11 +16,25 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@chromatic-com/storybook": "^1.5.0",
+    "@storybook/addon-essentials": "^8.1.6",
+    "@storybook/addon-interactions": "^8.1.6",
+    "@storybook/addon-links": "^8.1.6",
+    "@storybook/blocks": "^8.1.6",
+    "@storybook/test": "^8.1.6",
+    "@storybook/vue3": "^8.1.6",
+    "@storybook/vue3-vite": "^8.1.6",
+    "@vitejs/plugin-vue": "^5.0.5",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "sass": "^1.77.4",
+    "sass-loader": "^14.2.1",
+    "storybook": "^8.1.6"
   },
   "eslintConfig": {
     "root": true,
@@ -27,7 +43,8 @@
     },
     "extends": [
       "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:storybook/recommended"
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"

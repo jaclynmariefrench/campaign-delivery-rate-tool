@@ -1,0 +1,85 @@
+.input-wrapper {
+  display: flex;
+  width: 20rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+label {
+  color: #344051;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 0 0;
+  border: none;
+  color: #637083;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem;
+  outline: none;
+}
+
+.input-content {
+  display: flex;
+  padding: 8px 8px 8px 12px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid #ced2da;
+
+  &:focus-within {
+    outline: auto #4c94ff;
+    border: 1px solid #4c94ff;
+    box-shadow: 0px 0px 0px 2px #99c2ff;
+  }
+}
+
+.input-content-error {
+  border: 1px solid #f64c4c;
+
+  &:focus-within {
+    outline: auto #f98686;
+    box-shadow: 0px 0px 0px 2px #fccece;
+    border: 1px solid var(--Error-300, #f98686);
+  }
+}
+
+.hint {
+  color: #637083;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.3rem;
+}
+
+.error {
+  color: #f64c4c;
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.3rem;
+}
+
+.info-icon,
+.error-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.error-icon {
+  color: #f64c4c;
+}
