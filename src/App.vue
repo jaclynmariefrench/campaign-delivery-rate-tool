@@ -1,21 +1,15 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to the Campaign Delivery Rate App"/>
-  <CustomButton>Analyze</CustomButton>
-  <CustomInput />
+  <EmailForm />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import CustomButton from './components/ui/CustomButton.vue';
-import CustomInput from './components/ui/CustomInput.vue'
+import EmailForm from './components/pages/EmailForm.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    CustomButton,
-    CustomInput
+    EmailForm
   }
 }
 </script>
