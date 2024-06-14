@@ -7,7 +7,8 @@
         :name="name"
         :type="type"
         :placeholder="placeholder"
-        v-model="inputModel"
+        :value="inputModel"
+        @input="updateValue"
       />
       <svg
         v-if="!error"
@@ -53,12 +54,13 @@ export default {
       type: String,
       default: "text",
     },
-    value: String,
+    value: [String, Number],
     hint: String,
     error: Boolean,
     errorText: String,
     placeholder: String,
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       inputModel: this.value,
@@ -69,7 +71,12 @@ export default {
       this.inputModel = newVal;
     },
     inputModel(newVal) {
-      this.$emit("input", newVal);
+      this.$emit("update:modelValue", newVal);
+    },
+  },
+  methods: {
+    updateValue(event) {
+      this.inputModel = event.target.value;
     },
   },
 };
