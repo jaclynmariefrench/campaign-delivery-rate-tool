@@ -11,28 +11,28 @@
         type="number"
         v-model="deliveryRate"
         errorText="Please enter a number"
-        :error="!isDeliveryRateNumber"
+        :error="isDeliveryRateEmpty"
       />
       <CustomInput
         placeholder="Open Rate"
         type="number"
         v-model="openRate"
         errorText="Please enter a number"
-        :error="!isOpenRateNumber"
+        :error="isOpenRateEmpty"
       />
       <CustomInput
         placeholder="Click Rate"
         type="number"
         v-model="clickRate"
         errorText="Please enter a number"
-        :error="!isClickRateNumber"
+        :error="isClickRateEmpty"
       />
       <CustomInput
         placeholder="Complaint Rate"
         type="number"
         v-model="complaintRate"
         errorText="Please enter a number"
-        :error="!isComplaintRateNumber"
+        :error="isComplaintRateEmpty"
       />
     </div>
     <div class="button-container">
@@ -57,27 +57,38 @@ export default {
       openRate: '',
       clickRate: '',
       complaintRate: '',
+      formSubmitted: false,
     };
   },
   computed: {
-    isDeliveryRateNumber() {
-      return this.isNumber(this.deliveryRate);
+    isDeliveryRateEmpty() {
+      return this.formSubmitted && this.isEmpty(this.deliveryRate);
     },
-    isOpenRateNumber() {
-      return this.isNumber(this.openRate);
+    isOpenRateEmpty() {
+      return this.formSubmitted && this.isEmpty(this.openRate);
     },
-    isClickRateNumber() {
-      return this.isNumber(this.clickRate);
+    isClickRateEmpty() {
+      return this.formSubmitted && this.isEmpty(this.clickRate);
     },
-    isComplaintRateNumber() {
-      return this.isNumber(this.complaintRate);
+    isComplaintRateEmpty() {
+      return this.formSubmitted && this.isEmpty(this.complaintRate);
     },
   },
   methods: {
-    isNumber(value) {
-      return value === "" || /^-?\d+(\.\d+)?$/.test(value);
+    isEmpty(value) {
+      return value === "";
     },
     async handleSubmit() {
+      this.formSubmitted = true;
+      if (
+        this.isDeliveryRateEmpty ||
+        this.isOpenRateEmpty ||
+        this.isClickRateEmpty ||
+        this.isComplaintRateEmpty
+      ) {
+        return;
+      }
+
       const formData = {
         campaignName: this.campaignName,
         deliveryRate: this.deliveryRate,
