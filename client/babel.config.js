@@ -1,6 +1,7 @@
 module.exports = {
   presets: [
-    '@vue/cli-plugin-babel/preset'
+    '@vue/cli-plugin-babel/preset',
+    '@babel/preset-env'
   ],
   plugins: [
     ["module-resolver", {
@@ -8,6 +9,7 @@ module.exports = {
       "alias": {
         "@": "./src"
       }
-    }]
+    }],
+    '@babel/plugin-transform-runtime'
   ]
 }
