@@ -8,31 +8,31 @@
       />
       <CustomInput
         placeholder="Delivery Rate"
-        type="number"
+        type="text"
         v-model="deliveryRate"
         errorText="Please enter a number"
-        :error="isDeliveryRateEmpty"
+        :error="isDeliveryRateEmpty || isDeliveryRateInvalid"
       />
       <CustomInput
         placeholder="Open Rate"
-        type="number"
+        type="text"
         v-model="openRate"
         errorText="Please enter a number"
-        :error="isOpenRateEmpty"
+        :error="isOpenRateEmpty || isOpenRateInvalid"
       />
       <CustomInput
         placeholder="Click Rate"
-        type="number"
+        type="text"
         v-model="clickRate"
         errorText="Please enter a number"
-        :error="isClickRateEmpty"
+        :error="isClickRateEmpty || isClickRateInvalid"
       />
       <CustomInput
         placeholder="Complaint Rate"
-        type="number"
+        type="text"
         v-model="complaintRate"
         errorText="Please enter a number"
-        :error="isComplaintRateEmpty"
+        :error="isComplaintRateEmpty || isComplaintRateInvalid"
       />
     </div>
     <div class="button-container">
@@ -52,11 +52,11 @@ export default {
   },
   data() {
     return {
-      campaignName: '',
-      deliveryRate: '',
-      openRate: '',
-      clickRate: '',
-      complaintRate: '',
+      campaignName: "",
+      deliveryRate: "",
+      openRate: "",
+      clickRate: "",
+      complaintRate: "",
       formSubmitted: false,
     };
   },
@@ -73,21 +73,39 @@ export default {
     isComplaintRateEmpty() {
       return this.formSubmitted && this.isEmpty(this.complaintRate);
     },
+    isDeliveryRateInvalid() {
+      return this.formSubmitted && !this.isValidNumber(this.deliveryRate);
+    },
+    isOpenRateInvalid() {
+      return this.formSubmitted && !this.isValidNumber(this.openRate);
+    },
+    isClickRateInvalid() {
+      return this.formSubmitted && !this.isValidNumber(this.clickRate);
+    },
+    isComplaintRateInvalid() {
+      return this.formSubmitted && !this.isValidNumber(this.complaintRate);
+    },
   },
   methods: {
     isEmpty(value) {
       return value === "";
     },
+    isValidNumber(value) {
+      // This regular expression matches a number with optional decimal places
+      const regex = /^\d*\.?\d*$/;
+      return regex.test(value);
+    },
     async handleSubmit() {
-      this.formSubmitted = true;
-      if (
-        this.isDeliveryRateEmpty ||
-        this.isOpenRateEmpty ||
-        this.isClickRateEmpty ||
-        this.isComplaintRateEmpty
-      ) {
-        return;
-      }
+    this.formSubmitted = true;
+
+    if (
+      this.isDeliveryRateEmpty || this.isDeliveryRateInvalid ||
+      this.isOpenRateEmpty || this.isOpenRateInvalid ||
+      this.isClickRateEmpty || this.isClickRateInvalid ||
+      this.isComplaintRateEmpty || this.isComplaintRateInvalid
+    ) {
+      return;
+    }
 
       const formData = {
         campaignName: this.campaignName,
@@ -99,11 +117,14 @@ export default {
       try {
         console.log(formData);
       } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
       }
     },
   },
-}
+};
 </script>
 
 <style>
