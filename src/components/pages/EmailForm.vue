@@ -52,11 +52,11 @@ export default {
   },
   data() {
     return {
-      campaignName: "",
-      deliveryRate: "",
-      openRate: "",
-      clickRate: "",
-      complaintRate: "",
+      campaignName: '',
+      deliveryRate: '',
+      openRate: '',
+      clickRate: '',
+      complaintRate: '',
     };
   },
   computed: {
@@ -77,17 +77,22 @@ export default {
     isNumber(value) {
       return value === "" || /^-?\d+(\.\d+)?$/.test(value);
     },
-    handleSubmit() {
-      this.$emit("submit", {
+    async handleSubmit() {
+      const formData = {
         campaignName: this.campaignName,
         deliveryRate: this.deliveryRate,
         openRate: this.openRate,
         clickRate: this.clickRate,
         complaintRate: this.complaintRate,
-      });
+      };
+      try {
+        console.log(formData);
+      } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+      }
     },
   },
-};
+}
 </script>
 
 <style>

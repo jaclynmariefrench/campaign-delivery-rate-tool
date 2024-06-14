@@ -3,12 +3,12 @@
     <label v-if="label" :for="name">{{ label }}</label>
     <div class="input-content" :class="{ 'input-content-error': error }">
       <input
-      :id="name"
-      :name="name"
-      :type="type"
-      :placeholder="placeholder"
-      :value="value"
-      @input="updateValue"
+        :id="name"
+        :name="name"
+        :type="type"
+        :placeholder="placeholder"
+        :value="inputModel"
+        @input="updateValue"
       />
       <svg
         v-if="!error"
@@ -60,11 +60,7 @@ export default {
     errorText: String,
     placeholder: String,
   },
-  methods: {
-    updateValue(event) {
-      this.$emit('input', event.target.value);
-    },
-  },
+  emits: ['update:modelValue'],
   data() {
     return {
       inputModel: this.value,
@@ -75,7 +71,12 @@ export default {
       this.inputModel = newVal;
     },
     inputModel(newVal) {
-      this.$emit("input", newVal);
+      this.$emit("update:modelValue", newVal);
+    },
+  },
+  methods: {
+    updateValue(event) {
+      this.inputModel = event.target.value;
     },
   },
 };
