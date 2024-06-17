@@ -1,0 +1,16 @@
+[
+  {
+    "campaignName": "asdf",
+    "deliveryRate": "1",
+    "openRate": "2",
+    "clickRate": "3",
+    "complaintRate": "4"
+  },
+  {
+    "campaignName": "",
+    "deliveryRate": "1",
+    "openRate": "23",
+    "clickRate": "4",
+    "complaintRate": "4"
+  }
+]

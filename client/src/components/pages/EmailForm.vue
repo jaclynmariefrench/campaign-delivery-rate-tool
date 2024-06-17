@@ -115,7 +115,15 @@ export default {
         complaintRate: this.complaintRate,
       };
       try {
-        console.log(formData);
+        const response = await fetch('http://localhost:3000/email-form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await response.text();
+        console.log(data)
       } catch (error) {
         console.error(
           "There has been a problem with your fetch operation:",
