@@ -24,3 +24,6 @@ pnpm-debug.log*
 *.sw?
 
 *storybook.log
+
+#hidden conditions
+ratingCalculator.js
