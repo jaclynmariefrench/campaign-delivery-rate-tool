@@ -28,6 +28,13 @@
         :error="isClickRateEmpty || isClickRateInvalid"
       />
       <CustomInput
+        placeholder="Unsubscribe Rate"
+        type="text"
+        v-model="unsubscribeRate"
+        errorText="Please enter a number"
+        :error="isUnsubscribeRateEmpty || isUnsubscribeRateInvalid"
+      />
+      <CustomInput
         placeholder="Complaint Rate"
         type="text"
         v-model="complaintRate"
@@ -56,6 +63,7 @@ export default {
       deliveryRate: "",
       openRate: "",
       clickRate: "",
+      unsubscribeRate: "",
       complaintRate: "",
       formSubmitted: false,
     };
@@ -70,6 +78,9 @@ export default {
     isClickRateEmpty() {
       return this.formSubmitted && this.isEmpty(this.clickRate);
     },
+    isUnsubscribeRateEmpty() {
+      return this.formSubmitted && this.isEmpty(this.unsubscribeRate);
+    },
     isComplaintRateEmpty() {
       return this.formSubmitted && this.isEmpty(this.complaintRate);
     },
@@ -81,6 +92,9 @@ export default {
     },
     isClickRateInvalid() {
       return this.formSubmitted && !this.isValidNumber(this.clickRate);
+    },
+    isUnsubscribeRateInvalid() {
+      return this.formSubmitted && !this.isValidNumber(this.unsubscribeRate);
     },
     isComplaintRateInvalid() {
       return this.formSubmitted && !this.isValidNumber(this.complaintRate);
@@ -96,40 +110,34 @@ export default {
       return regex.test(value);
     },
     async handleSubmit() {
-    this.formSubmitted = true;
+      this.formSubmitted = true;
 
-    if (
-      this.isDeliveryRateEmpty || this.isDeliveryRateInvalid ||
-      this.isOpenRateEmpty || this.isOpenRateInvalid ||
-      this.isClickRateEmpty || this.isClickRateInvalid ||
-      this.isComplaintRateEmpty || this.isComplaintRateInvalid
-    ) {
-      return;
-    }
+      if (
+        this.isDeliveryRateEmpty ||
+        this.isDeliveryRateInvalid ||
+        this.isOpenRateEmpty ||
+        this.isOpenRateInvalid ||
+        this.isClickRateEmpty ||
+        this.isClickRateInvalid ||
+        this.isUnsubscribeRateEmpty ||
+        this.isUnsubscribeRateEmpty ||
+        this.isComplaintRateEmpty ||
+        this.isComplaintRateInvalid
+      ) {
+        return;
+      }
 
       const formData = {
         campaignName: this.campaignName,
         deliveryRate: this.deliveryRate,
         openRate: this.openRate,
         clickRate: this.clickRate,
+        unsubscribeRate: this.unsubscribeRate,
         complaintRate: this.complaintRate,
       };
-      try {
-        const response = await fetch('http://localhost:3000/email-form', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-        const data = await response.text();
-        console.log(data)
-      } catch (error) {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      }
+
+      // Emit the formSubmitted event with formData as payload
+      this.$emit("formSubmitted", formData);
     },
   },
 };
