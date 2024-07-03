@@ -6,9 +6,18 @@ const RatingRuleSchema = new mongoose.Schema({
     required: true,
     enum: ['Delivery Rate', 'Open Rate', 'Click Rate', 'Unsubscribe Rate', 'Complaint Rate']
   },
-  range: {
+  condition: {
     type: String,
+    required: true,
+    enum: ['Between', '<', '<=', '>', '>=', '===']
+  },
+  minValue: {
+    type: Number,
     required: true
+  },
+  maxValue: {
+    type: Number,
+    required: false
   },
   score: {
     type: Number,
