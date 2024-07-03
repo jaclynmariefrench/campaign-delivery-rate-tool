@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const RatingRuleSchema = new mongoose.Schema({
   name: {
@@ -16,4 +16,4 @@ const RatingRuleSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('RatingRule', RatingRuleSchema);
+export default mongoose.model('RatingRule', RatingRuleSchema);
