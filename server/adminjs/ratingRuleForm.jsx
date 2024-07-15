@@ -9,7 +9,6 @@ import {
   Section,
 } from "@adminjs/design-system";
 
-
 // just some regular React component
 function RatingRuleForm() {
   const [formData, setFormData] = useState({
@@ -24,7 +23,6 @@ function RatingRuleForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Input Change - Name: ${name}, Value: ${value}`);
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -37,7 +35,6 @@ function RatingRuleForm() {
 
   const handleSelectChange = (name) => (selectedOption) => {
     const value = selectedOption ? selectedOption.value : "";
-    console.log(`Select Change - Name: ${name}, Value: ${value}`);
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -51,6 +48,23 @@ function RatingRuleForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+  
+    const formDataObj = new FormData();
+    for (const key in formData) {
+      formDataObj.append(key, formData[key]);
+    }
+  
+    fetch("/admin/api/resources/RatingRule/actions/new", {
+      method: "POST",
+      body: formDataObj,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const getOptions = (name) => {
@@ -80,15 +94,15 @@ function RatingRuleForm() {
   };
 
   const inputContainer = {
-    marginBottom: '2.5rem',
-  }
+    marginBottom: "2.5rem",
+  };
 
   const buttonContainer = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    padding: '0px 32px 32px',
-    border: 'none',
-  }
+    display: "flex",
+    justifyContent: "space-around",
+    padding: "0px 32px 32px",
+    border: "none",
+  };
 
   return (
     <Section>
@@ -105,7 +119,8 @@ function RatingRuleForm() {
               value={getOption("name", formData.name)}
               onChange={handleSelectChange("name")}
               options={getOptions("name")}
-              isClearable />
+              isClearable
+            />
           </Box>
           <Box style={inputContainer}>
             <Label htmlFor="condition">Condition</Label>
@@ -115,16 +130,20 @@ function RatingRuleForm() {
               value={getOption("condition", formData.condition)}
               onChange={handleSelectChange("condition")}
               options={getOptions("condition")}
-              isClearable />
+              isClearable
+            />
           </Box>
           <Box style={inputContainer}>
-            <Label htmlFor="minValue">{showMaxValue? "Min Value" : "Value"}</Label>
+            <Label htmlFor="minValue">
+              {showMaxValue ? "Min Value" : "Value"}
+            </Label>
             <Input
               id="minValue"
               name="minValue"
               value={formData.minValue}
               onChange={handleInputChange}
-              width={1} />
+              width={1}
+            />
             {showMaxValue && (
               <>
                 <Label htmlFor="maxValue">Max Value</Label>
@@ -133,7 +152,8 @@ function RatingRuleForm() {
                   name="maxValue"
                   value={formData.maxValue}
                   onChange={handleInputChange}
-                  width={1} />
+                  width={1}
+                />
               </>
             )}
           </Box>
@@ -144,7 +164,8 @@ function RatingRuleForm() {
               name="score"
               value={formData.score}
               onChange={handleInputChange}
-              width={1} />
+              width={1}
+            />
           </Box>
           <Section style={buttonContainer}>
             <Button variant="contained" type="submit">

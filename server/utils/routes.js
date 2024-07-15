@@ -64,6 +64,27 @@ export const setupRoutes = (adminRouter) => {
       });
   });
 
+  //Rating rule calls
+  app.post("/admin/api/resources/RatingRule/actions/new", (req, res) => {
+    console.log("Received POST request at //admin/api/resources/RatingRule/actions/new");
+    const ratingRuleData = req.body;
+    console.log(ratingRuleData);
+
+    // Add rating rule data to MongoDB using Mongoose
+    RatingRule.create(ratingRuleData)
+      .then((result) => {
+        console.log("Inserted rating rule into MongoDB");
+        res.send({
+          message: "Rating rule created",
+          id: result._id,
+        });
+      })
+      .catch((err) => {
+        console.error("Error inserting rating rule into MongoDB", err);
+        res.status(500).send("Error inserting rating rule into MongoDB");
+      });
+  });
+
   app.get("/email-form/:id", (req, res) => {
     const id = req.params.id;
     Email.findById(id)
