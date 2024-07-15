@@ -36,7 +36,7 @@ function RatingRuleForm() {
   };
 
   const handleSelectChange = (name) => (selectedOption) => {
-    const value = selectedOption.value;
+    const value = selectedOption ? selectedOption.value : "";
     console.log(`Select Change - Name: ${name}, Value: ${value}`);
     setFormData((prevState) => ({
       ...prevState,
@@ -104,7 +104,8 @@ function RatingRuleForm() {
               name="name"
               value={getOption("name", formData.name)}
               onChange={handleSelectChange("name")}
-              options={getOptions("name")} />
+              options={getOptions("name")}
+              isClearable />
           </Box>
           <Box style={inputContainer}>
             <Label htmlFor="condition">Condition</Label>
@@ -113,10 +114,11 @@ function RatingRuleForm() {
               name="condition"
               value={getOption("condition", formData.condition)}
               onChange={handleSelectChange("condition")}
-              options={getOptions("condition")} />
+              options={getOptions("condition")}
+              isClearable />
           </Box>
           <Box style={inputContainer}>
-            <Label htmlFor="minValue">Min Value</Label>
+            <Label htmlFor="minValue">{showMaxValue? "Min Value" : "Value"}</Label>
             <Input
               id="minValue"
               name="minValue"
