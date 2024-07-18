@@ -1,0 +1,9 @@
+.input_container {
+  margin-bottom: 2.5rem;
+}
+
+.button_container {
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 32px 32px;
+}
