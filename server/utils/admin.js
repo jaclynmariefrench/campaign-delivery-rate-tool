@@ -5,6 +5,7 @@ import { Email } from "../models/db.js";
 import { Components, componentLoader } from "../adminjs/components.js";
 import RatingRule from "../models/ratingSchema.js";
 
+
 AdminJS.registerAdapter(AdminJSMongoose);
 
 export const setupAdminJS = () => {
@@ -13,6 +14,15 @@ export const setupAdminJS = () => {
       Email,
       {
         resource: RatingRule,
+        options: {
+          properties: {
+            condition: {
+              components: {
+                list: Components.ConditionBadge,
+              }
+            }
+          }
+        }
       },
     ],
     rootPath: "/admin",
