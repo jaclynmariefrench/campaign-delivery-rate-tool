@@ -1,4 +1,4 @@
-import AdminJS, { actions } from "adminjs";
+import AdminJS from 'adminjs';
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
@@ -18,24 +18,24 @@ export const setupAdminJS = () => {
             new: {
               actionType: "resource",
               component: Components.RatingRuleForm,
-              // handler: async (context) => {
-              //   // Log the context object to inspect its structure
-              //   console.log("Context:", context);
-
-              //   // Check if context.h is defined
-              //   if (!context.h) {
-              //     // Log an error message for debugging
-              //     console.error("context.h is undefined. Context:", context);
-              //     throw new Error("context.h is undefined");
-              //   }
-
-              //   return {
-              //     redirectUrl: context.h.resourceActionUrl({
-              //       resourceId: context.resource.id(),
-              //       actionName: "ratingRuleForm",
-              //     }),
-              //   };
-              // },
+              after: async (response) => {
+                if (response.record && response.record.errors) {
+                  return {
+                    ...response,
+                    notice: {
+                      message: 'Error submitting RatingRule',
+                      type: 'error',
+                    },
+                  };
+                }
+                return {
+                  ...response,
+                  notice: {
+                    message: 'RatingRule submitted successfully!',
+                    type: 'success',
+                  },
+                };
+              },
             },
           },
           properties: {
@@ -60,3 +60,6 @@ export const setupAdminJS = () => {
   admin.watch();
   return AdminJSExpress.buildRouter(admin);
 };
+
+
+
