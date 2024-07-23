@@ -5,7 +5,6 @@ import {
   Input,
   Button,
   Select,
-  Header,
   Section,
 } from "@adminjs/design-system";
 
@@ -47,20 +46,25 @@ function RatingRuleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-
+  
     const formDataObj = new FormData();
     for (const key in formData) {
       formDataObj.append(key, formData[key]);
     }
-
+  
     fetch("/admin/api/resources/RatingRule/actions/new", {
       method: "POST",
       body: formDataObj,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("Success:", data);
+        window.location.assign("/admin/resources/RatingRule");
       })
       .catch((error) => {
         console.error("Error:", error);
