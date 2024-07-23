@@ -1,4 +1,4 @@
-import AdminJS from "adminjs";
+import AdminJS, { actions } from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
@@ -15,6 +15,20 @@ export const setupAdminJS = () => {
       {
         resource: RatingRule,
         options: {
+          actions: {
+            new: {
+              actionType: 'resource',
+              component: Components.RatingRuleForm,
+              handler: async (context) => {
+                return {
+                  redirectUrl: context.h.resourceActionUrl({
+                    resourceId: context.resource.id(),
+                    actionName: 'ratingRuleForm',
+                  })
+                }
+              }
+            }
+          },
           properties: {
             condition: {
               components: {
