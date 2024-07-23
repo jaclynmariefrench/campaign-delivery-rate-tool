@@ -5,7 +5,6 @@ import {
   Input,
   Button,
   Select,
-  Header,
   Section,
 } from "@adminjs/design-system";
 
@@ -47,7 +46,6 @@ function RatingRuleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
   
     const formDataObj = new FormData();
     for (const key in formData) {
@@ -58,9 +56,15 @@ function RatingRuleForm() {
       method: "POST",
       body: formDataObj,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("Success:", data);
+        window.location.assign("/admin/resources/RatingRule");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -105,76 +109,71 @@ function RatingRuleForm() {
   };
 
   return (
-    <Section>
-      <Box variant="gray">
-        <Header.H2>Some header</Header.H2>
-      </Box>
-      <Box as="form" onSubmit={handleSubmit}>
-        <Box variant="white">
-          <Box style={inputContainer}>
-            <Label htmlFor="name">Name</Label>
-            <Select
-              id="name"
-              name="name"
-              value={getOption("name", formData.name)}
-              onChange={handleSelectChange("name")}
-              options={getOptions("name")}
-              isClearable
-            />
-          </Box>
-          <Box style={inputContainer}>
-            <Label htmlFor="condition">Condition</Label>
-            <Select
-              id="condition"
-              name="condition"
-              value={getOption("condition", formData.condition)}
-              onChange={handleSelectChange("condition")}
-              options={getOptions("condition")}
-              isClearable
-            />
-          </Box>
-          <Box style={inputContainer}>
-            <Label htmlFor="minValue">
-              {showMaxValue ? "Min Value" : "Value"}
-            </Label>
-            <Input
-              id="minValue"
-              name="minValue"
-              value={formData.minValue}
-              onChange={handleInputChange}
-              width={1}
-            />
-            {showMaxValue && (
-              <>
-                <Label htmlFor="maxValue">Max Value</Label>
-                <Input
-                  id="maxValue"
-                  name="maxValue"
-                  value={formData.maxValue}
-                  onChange={handleInputChange}
-                  width={1}
-                />
-              </>
-            )}
-          </Box>
-          <Box style={inputContainer}>
-            <Label htmlFor="score">Score</Label>
-            <Input
-              id="score"
-              name="score"
-              value={formData.score}
-              onChange={handleInputChange}
-              width={1}
-            />
-          </Box>
-          <Section style={buttonContainer}>
-            <Button variant="contained" type="submit">
-              Submit
-            </Button>
-          </Section>
+    <Box as="form" onSubmit={handleSubmit}>
+      <Box variant="white">
+        <Box style={inputContainer}>
+          <Label htmlFor="name">Name</Label>
+          <Select
+            id="name"
+            name="name"
+            value={getOption("name", formData.name)}
+            onChange={handleSelectChange("name")}
+            options={getOptions("name")}
+            isClearable
+          />
         </Box>
+        <Box style={inputContainer}>
+          <Label htmlFor="condition">Condition</Label>
+          <Select
+            id="condition"
+            name="condition"
+            value={getOption("condition", formData.condition)}
+            onChange={handleSelectChange("condition")}
+            options={getOptions("condition")}
+            isClearable
+          />
+        </Box>
+        <Box style={inputContainer}>
+          <Label htmlFor="minValue">
+            {showMaxValue ? "Min Value" : "Value"}
+          </Label>
+          <Input
+            id="minValue"
+            name="minValue"
+            value={formData.minValue}
+            onChange={handleInputChange}
+            width={1}
+          />
+          {showMaxValue && (
+            <>
+              <Label htmlFor="maxValue">Max Value</Label>
+              <Input
+                id="maxValue"
+                name="maxValue"
+                value={formData.maxValue}
+                onChange={handleInputChange}
+                width={1}
+              />
+            </>
+          )}
+        </Box>
+        <Box style={inputContainer}>
+          <Label htmlFor="score">Score</Label>
+          <Input
+            id="score"
+            name="score"
+            value={formData.score}
+            onChange={handleInputChange}
+            width={1}
+          />
+        </Box>
+        <Section style={buttonContainer}>
+          <Button variant="contained" type="submit">
+            Submit
+          </Button>
+        </Section>
       </Box>
-    </Section>
+    </Box>
   );
 }
 
