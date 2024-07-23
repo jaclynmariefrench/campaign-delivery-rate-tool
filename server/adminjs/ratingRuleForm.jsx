@@ -7,8 +7,8 @@ import {
   Select,
   Section,
 } from "@adminjs/design-system";
+import { useNotice } from "adminjs";
 
-// just some regular React component
 function RatingRuleForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -43,6 +43,8 @@ function RatingRuleForm() {
       setShowMaxValue(value === "Between");
     }
   };
+
+  const addNotice = useNotice();
 
   const handleSubmit = (e) => {
     e.preventDefault();
