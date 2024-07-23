@@ -44,12 +44,6 @@ export const setupAdminJS = () => {
     options: {
       databaseName: "campaign_delivery_rate_tool",
     },
-    pages: {
-      customRatingRuleForm: {
-        label: "Custom Rating Rule",
-        component: Components.RatingRuleForm,
-      }
-    },
     componentLoader,
   };
 
