@@ -19,6 +19,7 @@ function RatingRuleForm() {
   });
 
   const [showMaxValue, setShowMaxValue] = useState(false);
+  const addNotice = useNotice();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,16 +45,14 @@ function RatingRuleForm() {
     }
   };
 
-  const addNotice = useNotice();
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const formDataObj = new FormData();
     for (const key in formData) {
       formDataObj.append(key, formData[key]);
     }
-  
+
     fetch("/admin/api/resources/RatingRule/actions/new", {
       method: "POST",
       body: formDataObj,
@@ -66,10 +65,21 @@ function RatingRuleForm() {
       })
       .then((data) => {
         console.log("Success:", data);
-        window.location.assign("/admin/resources/RatingRule");
+        addNotice({
+          message: 'RatingRule submitted successfully!',
+          type: 'success',
+        });
+        // Redirect after a short delay to ensure the message is shown
+        setTimeout(() => {
+          window.location.assign("/admin/resources/RatingRule");
+        }, 2000); // Adjust the delay time as needed
       })
       .catch((error) => {
         console.error("Error:", error);
+        addNotice({
+          message: `Error submitting RatingRule: ${error.message}`,
+          type: 'error',
+        });
       });
   };
 

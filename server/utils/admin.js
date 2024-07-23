@@ -1,4 +1,4 @@
-import AdminJS from 'adminjs';
+import AdminJS, { actions } from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
@@ -18,24 +18,6 @@ export const setupAdminJS = () => {
             new: {
               actionType: "resource",
               component: Components.RatingRuleForm,
-              after: async (response) => {
-                if (response.record && response.record.errors) {
-                  return {
-                    ...response,
-                    notice: {
-                      message: 'Error submitting RatingRule',
-                      type: 'error',
-                    },
-                  };
-                }
-                return {
-                  ...response,
-                  notice: {
-                    message: 'RatingRule submitted successfully!',
-                    type: 'success',
-                  },
-                };
-              },
             },
           },
           properties: {
@@ -60,6 +42,3 @@ export const setupAdminJS = () => {
   admin.watch();
   return AdminJSExpress.buildRouter(admin);
 };
-
-
-
