@@ -19,6 +19,7 @@ export const setupAdminJS = () => {
             condition: {
               components: {
                 list: Components.ConditionBadge,
+                show: Components.ConditionShow,
               }
             }
           }
