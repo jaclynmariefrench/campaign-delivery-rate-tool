@@ -4,6 +4,7 @@ import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
 import { Components, componentLoader } from "../adminjs/components.js";
 import RatingRule from "../models/ratingSchema.js";
+import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
@@ -30,6 +31,7 @@ export const setupAdminJS = () => {
           },
         },
       },
+      DeliverabilityRating,
     ],
     rootPath: "/admin",
     options: {
