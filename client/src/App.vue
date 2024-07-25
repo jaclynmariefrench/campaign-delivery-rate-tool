@@ -1,7 +1,7 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
   <EmailForm @formSubmitted="submitForm" />
-  <DeliverabilityRating :rating="deliverabilityRating" />
+  <DeliverabilityRating :rating="deliverabilityRating" :progressBar="progressBar" />
 </template>
 
 <script>
