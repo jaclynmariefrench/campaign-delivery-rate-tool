@@ -1,9 +1,10 @@
-import AdminJS, { actions } from "adminjs";
+import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
 import { Components, componentLoader } from "../adminjs/components.js";
 import RatingRule from "../models/ratingSchema.js";
+import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
@@ -20,6 +21,19 @@ export const setupAdminJS = () => {
               component: Components.RatingRuleForm,
             },
           },
+          properties: {
+            condition: {
+              components: {
+                list: Components.ConditionBadge,
+                show: Components.ConditionShow,
+              },
+            },
+          },
+        },
+      },
+      {
+        resource: DeliverabilityRating,
+        options: {
           properties: {
             condition: {
               components: {

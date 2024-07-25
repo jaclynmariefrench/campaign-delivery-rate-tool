@@ -1,7 +1,7 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
   <EmailForm @formSubmitted="submitForm" />
-  <DeliverabilityRating :rating="deliverabilityRating" />
+  <DeliverabilityRating :rating="deliverabilityRating" :progressBar="progressBar" />
 </template>
 
 <script>
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       deliverabilityRating: null,
+      progressBar: 0,
     };
   },
   methods: {
@@ -31,6 +32,7 @@ export default {
         });
         const data = await response.json();
         this.deliverabilityRating = data.deliverabilityRating;
+        this.progressBar = data.progressBar;
       } catch (error) {
         console.error(
           "There has been a problem with your fetch operation:",
