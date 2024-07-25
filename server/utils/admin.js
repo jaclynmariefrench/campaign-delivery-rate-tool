@@ -1,4 +1,4 @@
-import AdminJS, { actions } from "adminjs";
+import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import { Email } from "../models/db.js";
@@ -31,7 +31,19 @@ export const setupAdminJS = () => {
           },
         },
       },
-      DeliverabilityRating,
+      {
+        resource: DeliverabilityRating,
+        options: {
+          properties: {
+            condition: {
+              components: {
+                list: Components.ConditionBadge,
+                show: Components.ConditionShow,
+              },
+            },
+          },
+        },
+      },
     ],
     rootPath: "/admin",
     options: {

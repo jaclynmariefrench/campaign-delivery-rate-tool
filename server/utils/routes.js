@@ -18,55 +18,73 @@ app.use(
 );
 
 export const setupRoutes = (adminRouter) => {
-    if (!adminRouter || !adminRouter.options || !adminRouter.options.rootPath) {
-      throw new Error('Invalid adminRouter configuration');
-    }
-  
-    app.use(adminRouter.options.rootPath, adminRouter.admin);
+  if (!adminRouter || !adminRouter.options || !adminRouter.options.rootPath) {
+    throw new Error("Invalid adminRouter configuration");
+  }
+
+  app.use(adminRouter.options.rootPath, adminRouter.admin);
 
   app.get("/", (req, res) => {
     console.log("Received GET request at /");
     res.send("Hello World!");
   });
 
-  app.post("/email-form", (req, res) => {
+  app.post("/email-form", async (req, res) => {
     console.log("Received POST request at /email-form");
     const formData = req.body;
     console.log(formData);
 
-    // Calculate the deliverability rating
-    const deliverabilityRating = calculateDeliverabilityRating(
-      formData.deliveryRate,
-      formData.openRate,
-      formData.clickRate,
-      formData.unsubscribeRate,
-      formData.complaintRate
-    );
-
-    // Add the rating to the form data
-    formData.deliverabilityRating = deliverabilityRating;
-
-    // Add form data to MongoDB using Mongoose
-    console.log("About to insert data into MongoDB");
-    Email.create(formData)
-      .then((result) => {
-        console.log("Inserted data into MongoDB");
-        // Send the rating and the inserted document's ID back to the client
-        res.send({
-          message: "Form data received",
-          deliverabilityRating,
-          id: result._id,
-        });
-      })
-      .catch((err) => {
-        console.error("Error inserting data into MongoDB", err);
-        res.status(500).send("Error inserting data into MongoDB");
+    try {
+      // Log input parameters
+      console.log("Calculating deliverability rating with:", {
+        deliveryRate: formData.deliveryRate,
+        openRate: formData.openRate,
+        clickRate: formData.clickRate,
+        unsubscribeRate: formData.unsubscribeRate,
+        complaintRate: formData.complaintRate,
       });
+
+      // Calculate the deliverability rating
+      const { score, deliverabilityRating } =
+        await calculateDeliverabilityRating(
+          formData.deliveryRate,
+          formData.openRate,
+          formData.clickRate,
+          formData.unsubscribeRate,
+          formData.complaintRate
+        );
+
+      // Log the calculated values
+      console.log("Calculated Score:", score);
+      console.log("Calculated Deliverability Rating:", deliverabilityRating);
+      
+      // Add the rating to the form data
+      formData.deliverabilityRating = deliverabilityRating;
+      formData.score = score;
+
+      // Add form data to MongoDB using Mongoose
+      console.log("About to insert data into MongoDB");
+      const result = await Email.create(formData);
+      console.log("Inserted data into MongoDB");
+
+      // Send the rating and the inserted document's ID back to the client
+      res.send({
+        message: "Form data received",
+        deliverabilityRating,
+        score,
+        id: result._id,
+      });
+    } catch (err) {
+      console.error("Error inserting data into MongoDB", err);
+      res.status(500).send("Error inserting data into MongoDB");
+    }
   });
 
-  //Rating rule calls
+  // Rating rule calls
   app.post("/admin/api/resources/RatingRule/actions/new", (req, res) => {
-    console.log("Received POST request at //admin/api/resources/RatingRule/actions/new");
+    console.log(
+      "Received POST request at /admin/api/resources/RatingRule/actions/new"
+    );
     const ratingRuleData = req.body;
     console.log(ratingRuleData);
 

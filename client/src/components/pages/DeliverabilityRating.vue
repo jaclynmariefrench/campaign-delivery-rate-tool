@@ -18,6 +18,10 @@ export default {
       type: String,
       default: null,
     },
+    progressBar: {
+      type: Number,
+      default: 0,
+    }
   },
   components: {
     apexchart: VueApexCharts,
@@ -63,31 +67,12 @@ export default {
         },
         labels: ["Progress"],
       },
-      series: [this.getSeriesNumber(this.rating)],
+      series: [this.progressBar],
     };
   },
-  methods: {
-    getSeriesNumber(rating) {
-        if (rating) {
-            switch (rating.toLowerCase()) {
-                case 'great':
-                    return 98;
-                case 'good':
-                    return 70;
-                case 'ok':
-                    return 50;
-                case 'bad':
-                    return 30;
-                default:
-                    return 0;
-            }
-        }
-        return 0;
-    }
-  },
   watch: {
-    rating(newRating) {
-        this.series = [this.getSeriesNumber(newRating)];
+    progressBar(newProgressBar) {
+        this.series = [newProgressBar];
     }
   }
 };
