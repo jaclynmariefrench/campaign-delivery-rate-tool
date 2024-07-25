@@ -55,9 +55,11 @@ export async function calculateDeliverabilityRating(
 
   // Determine the deliverability rating based on the score
   let deliverabilityRating = "Undefined";
+  let progressBar = 0;
   ratingRules.forEach(ratingRule => {
     if (evaluateCondition(score, ratingRule.condition, ratingRule.minScore, ratingRule.maxScore)) {
       deliverabilityRating = ratingRule.ratingTerm;
+      progressBar = ratingRule.progressBar;
     }
   });
 
@@ -65,6 +67,7 @@ export async function calculateDeliverabilityRating(
   // Return the calculated score and deliverability rating
   return {
     score,
-    deliverabilityRating
+    deliverabilityRating,
+    progressBar
   };
 }

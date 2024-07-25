@@ -45,7 +45,7 @@ export const setupRoutes = (adminRouter) => {
       });
 
       // Calculate the deliverability rating
-      const { score, deliverabilityRating } =
+      const { score, deliverabilityRating, progressBar } =
         await calculateDeliverabilityRating(
           formData.deliveryRate,
           formData.openRate,
@@ -57,7 +57,8 @@ export const setupRoutes = (adminRouter) => {
       // Log the calculated values
       console.log("Calculated Score:", score);
       console.log("Calculated Deliverability Rating:", deliverabilityRating);
-      
+      console.log("Calculated Progress Bar:", progressBar);
+
       // Add the rating to the form data
       formData.deliverabilityRating = deliverabilityRating;
       formData.score = score;
@@ -72,6 +73,7 @@ export const setupRoutes = (adminRouter) => {
         message: "Form data received",
         deliverabilityRating,
         score,
+        progressBar,
         id: result._id,
       });
     } catch (err) {
