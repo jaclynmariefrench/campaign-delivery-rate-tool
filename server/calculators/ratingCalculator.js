@@ -1,5 +1,5 @@
-import RatingRule from "./models/ratingSchema.js";
-import DeliverabilityRating from "./models/deliverabilityRatingSchema.js";
+import RatingRule from "../models/ratingSchema.js";
+import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
 
 
 function evaluateCondition(rate, condition, minValue, maxValue) {

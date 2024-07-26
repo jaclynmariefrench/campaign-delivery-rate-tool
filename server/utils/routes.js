@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { Email } from "../models/db.js";
-import { calculateDeliverabilityRating } from "/Users/jaclynfrench/workspace/email_project/campaign-delivery-rate-tool/server/ratingCalculator.js";
+import { calculateDeliverabilityRating } from "../calculators/ratingCalculator.js";
 
 const { json } = bodyParser;
 const app = express();
