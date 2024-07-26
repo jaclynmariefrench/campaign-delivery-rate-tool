@@ -24,3 +24,6 @@ pnpm-debug.log*
 *.sw?
 
 *storybook.log
+
+#hide hardcoded business logic
+hardcodedCal.js

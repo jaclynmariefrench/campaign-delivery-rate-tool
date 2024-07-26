@@ -1,5 +1,5 @@
-import RatingRule from "./models/ratingSchema.js";
-import DeliverabilityRating from "./models/deliverabilityRatingSchema.js";
+import RatingRule from "../models/ratingSchema.js";
+import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
 
 
 function evaluateCondition(rate, condition, minValue, maxValue) {
@@ -26,6 +26,8 @@ export async function calculateDeliverabilityRating(
   unsubscribeRate,
   complaintRate
 ) {
+    // // Simulate an error for testing fallback logic
+    // throw new Error("Simulated error for testing fallback logic");
   let score = 0;
 
   // Fetch the rules from the database

@@ -2,7 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { Email } from "../models/db.js";
-import { calculateDeliverabilityRating } from "/Users/jaclynfrench/workspace/email_project/campaign-delivery-rate-tool/server/ratingCalculator.js";
+// import { RatingRule } from "../models/ratingSchema.js";
+import { calculateDeliverabilityRating } from "../calculators/ratingCalculator.js";
+import { hardcodedCalculateDeliverability } from "../calculators/hardcodedCal.js";
 
 const { json } = bodyParser;
 const app = express();
@@ -43,16 +45,32 @@ export const setupRoutes = (adminRouter) => {
         unsubscribeRate: formData.unsubscribeRate,
         complaintRate: formData.complaintRate,
       });
-
+      
       // Calculate the deliverability rating
-      const { score, deliverabilityRating, progressBar } =
-        await calculateDeliverabilityRating(
+      let ratingResult;
+      try {
+        ratingResult = await calculateDeliverabilityRating(
           formData.deliveryRate,
           formData.openRate,
           formData.clickRate,
           formData.unsubscribeRate,
           formData.complaintRate
         );
+      } catch (error) {
+        console.error(
+          "Primary calculation failed, using fallback logic",
+          error
+        );
+        ratingResult = hardcodedCalculateDeliverability(
+          formData.deliveryRate,
+          formData.openRate,
+          formData.clickRate,
+          formData.unsubscribeRate,
+          formData.complaintRate
+        );
+      }
+
+      const { score, deliverabilityRating, progressBar } = ratingResult;
 
       // Log the calculated values
       console.log("Calculated Score:", score);
