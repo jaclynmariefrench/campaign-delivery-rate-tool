@@ -1,7 +1,7 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
-import { Email } from "../models/db.js";
+import { Email } from "../models/emailSchema.js"
 import { Components, componentLoader } from "../adminjs/components.js";
 import RatingRule from "../models/ratingSchema.js";
 import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
