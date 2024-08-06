@@ -1,10 +1,11 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
-import { Email } from "../models/emailSchema.js"
+import { Email } from "../models/emailSchema.js";
 import { Components, componentLoader } from "../adminjs/components.js";
 import RatingRule from "../models/ratingSchema.js";
 import DeliverabilityRating from "../models/deliverabilityRatingSchema.js";
+import { buildAdminRouter } from "../auth/authMiddleware.js";
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
@@ -46,13 +47,13 @@ export const setupAdminJS = () => {
       },
     ],
     rootPath: "/admin",
-    options: {
-      databaseName: "campaign_delivery_rate_tool",
-    },
+    // options: {
+    //   databaseName: "campaign_delivery_rate_tool",
+    // },
     componentLoader,
   };
 
   const admin = new AdminJS(adminJsOptions);
   admin.watch();
-  return AdminJSExpress.buildRouter(admin);
+  return buildAdminRouter(admin);
 };

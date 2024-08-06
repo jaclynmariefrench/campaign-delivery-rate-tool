@@ -1,9 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import { Email } from '../models/emailSchema.js';
-import { calculateDeliverabilityRating } from '../calculators/ratingCalculator.js';
-import { hardcodedCalculateDeliverability } from '../calculators/hardcodedCal.js';
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+// import session from "express-session";
+import { Email } from "../models/emailSchema.js";
+import { calculateDeliverabilityRating } from "../calculators/ratingCalculator.js";
+import { hardcodedCalculateDeliverability } from "../calculators/hardcodedCal.js";
+
 
 const { json } = bodyParser;
 
@@ -14,31 +16,48 @@ export function setupRoutes(adminRouter) {
 
   router.use(
     cors({
-      origin: 'http://localhost:8080',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      origin: "http://localhost:8080",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
     })
   );
 
-  console.log('adminRouter:', adminRouter);
-  if (!adminRouter || !adminRouter.options || !adminRouter.options.rootPath) {
-    throw new Error('Invalid adminRouter configuration');
-  }
+  // //session middleware
+  // router.use(
+  //   session({
+  //     secret: "your-secret-key",
+  //     resave: false,
+  //     saveUninitialized: false,
+  //     cookie: { secure: false },
+  //   })
+  // );
 
+  // if (!adminRouter || !adminRouter.options || !adminRouter.options.rootPath) {
+  //   throw new Error("Invalid adminRouter configuration");
+  // }
+
+  //use the adminjs router
   router.use(adminRouter.options.rootPath, adminRouter.admin);
+  //testing
+  console.log('Router:', router.stack.map(layer => layer.route ? layer.route.path : layer.name));
+  router.use((req, res, next) => {
+    console.log('Request Path:', req.path);
+    next();
+  });
+  
 
-  router.get('/', (req, res) => {
-    console.log('Received GET request at /');
-    res.send('Hello World!');
+  router.get("/", (req, res) => {
+    console.log("Received GET request at /");
+    res.send("Hello World!");
   });
 
-  router.post('/email-form', async (req, res) => {
-    console.log('Received POST request at /email-form');
+  router.post("/email-form", async (req, res) => {
+    console.log("Received POST request at /email-form");
     const formData = req.body;
     console.log(formData);
 
     try {
-      console.log('Calculating deliverability rating with:', {
+      console.log("Calculating deliverability rating with:", {
         deliveryRate: formData.deliveryRate,
         openRate: formData.openRate,
         clickRate: formData.clickRate,
@@ -56,7 +75,10 @@ export function setupRoutes(adminRouter) {
           formData.complaintRate
         );
       } catch (error) {
-        console.error('Primary calculation failed, using fallback logic', error);
+        console.error(
+          "Primary calculation failed, using fallback logic",
+          error
+        );
         ratingResult = hardcodedCalculateDeliverability(
           formData.deliveryRate,
           formData.openRate,
@@ -68,62 +90,63 @@ export function setupRoutes(adminRouter) {
 
       const { score, deliverabilityRating, progressBar } = ratingResult;
 
-      console.log('Calculated Score:', score);
-      console.log('Calculated Deliverability Rating:', deliverabilityRating);
-      console.log('Calculated Progress Bar:', progressBar);
+      console.log("Calculated Score:", score);
+      console.log("Calculated Deliverability Rating:", deliverabilityRating);
+      console.log("Calculated Progress Bar:", progressBar);
 
       formData.deliverabilityRating = deliverabilityRating;
       formData.score = score;
 
-      console.log('About to insert data into MongoDB');
       const result = await Email.create(formData);
-      console.log('Inserted data into MongoDB');
+      console.log("Inserted data into MongoDB");
 
       res.send({
-        message: 'Form data received',
+        message: "Form data received",
         deliverabilityRating,
         score,
         progressBar,
         id: result._id,
       });
     } catch (err) {
-      console.error('Error inserting data into MongoDB', err);
-      res.status(500).send('Error inserting data into MongoDB');
+      console.error("Error inserting data into MongoDB", err);
+      res.status(500).send("Error inserting data into MongoDB");
     }
   });
 
-  router.post('/admin/api/resources/RatingRule/actions/new', (req, res) => {
-    console.log('Received POST request at /admin/api/resources/RatingRule/actions/new');
+  router.post("/admin/api/resources/RatingRule/actions/new", (req, res) => {
+    console.log(
+      "Received POST request at /admin/api/resources/RatingRule/actions/new"
+    );
     const ratingRuleData = req.body;
     console.log(ratingRuleData);
 
     RatingRule.create(ratingRuleData)
       .then((result) => {
-        console.log('Inserted rating rule into MongoDB');
+        console.log("Inserted rating rule into MongoDB");
         res.send({
-          message: 'Rating rule created',
+          message: "Rating rule created",
           id: result._id,
         });
       })
       .catch((err) => {
-        console.error('Error inserting rating rule into MongoDB', err);
-        res.status(500).send('Error inserting rating rule into MongoDB');
+        console.error("Error inserting rating rule into MongoDB", err);
+        res.status(500).send("Error inserting rating rule into MongoDB");
       });
   });
 
-  router.get('/email-form/:id', (req, res) => {
+  router.get("/email-form/:id", (req, res) => {
     const id = req.params.id;
     Email.findById(id)
       .then((document) => {
         if (document) {
           res.send(document.deliverabilityRating);
         } else {
-          res.status(404).send('No document found with the given ID');
+          res.status(404).send("No document found with the given ID");
         }
       })
       .catch((err) => {
-        console.error('Error fetching document from MongoDB', err);
-        res.status(500).send('Error fetching document from MongoDB');
+        console.error("Error fetching document from MongoDB", err);
+        res.status(500).send("Error fetching document from MongoDB");
       });
   });
 

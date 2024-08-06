@@ -1,13 +1,12 @@
-const AdminJS = require('adminjs');
-const AdminJSExpress = require('@adminjs/express');
-const { authenticate } = require('./auth');
+import AdminJS from 'adminjs';
+import AdminJSExpress from '@adminjs/express';
+import { authenticate } from './auth.js';
 
-const buildAdminRouter = (adminJs) => {
-    return AdminJSExpress.buildAuthenticatedRouter(adminJs, {
+export const buildAdminRouter = (adminJs) => {
+    const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
         authenticate,
         cookieName: 'adminjs',
         cookiePassword: process.env.COOKIE_SECRET || 'some-secret-password-used-to-secure-cookie',
-    })
-}
-
-module.exports = { buildAdminRouter };
+    });
+    return router;
+};

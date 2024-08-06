@@ -1,6 +1,6 @@
-const User = require('../models/userSchema');
+import { User } from '../models/userSchema.js';
 
-const authenticate = async (email, password) => {
+export const authenticate = async (email, password) => {
     const user = await User.findOne({ email });
     if (user && await user.comparePassword(password)) {
         return { email: user.email };
@@ -8,4 +8,3 @@ const authenticate = async (email, password) => {
     return null;
 }
 
-module.exports = { authenticate };
