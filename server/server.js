@@ -15,7 +15,7 @@ connectDB()
     console.log("Connected to MongoDB");
 
     // Setup AdminJS
-    const adminRouter = setupAdminJS(); // This now includes authentication
+    const adminRouter = setupAdminJS();
 
     // Create an Express app
     const app = express();
@@ -30,15 +30,6 @@ connectDB()
       })
     );
 
-    //testing
-    console.log("AdminJS Router", adminRouter);
-
-    // testing session middleware
-    app.use((req, res, next) => {
-      console.log("Session Middleware:", req.session);
-      next();
-    });
-
     // Rate limiter middleware
     const limiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
@@ -47,13 +38,9 @@ connectDB()
 
     // Apply rate limiter and route setup
     app.use(
-      adminRouter.options.rootPath,
+      '/admin',
       limiter,
-      (req, res, next) => {
-        console.log("Incoming Request to AdminJS:", req.method, req.url);
-        next();
-      },
-      setupRoutes(adminRouter)
+      adminRouter
     );
 
     // Log route setup

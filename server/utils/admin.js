@@ -47,18 +47,16 @@ export const setupAdminJS = () => {
       },
     ],
     rootPath: "/admin",
-    // options: {
-    //   databaseName: "campaign_delivery_rate_tool",
-    // },
     componentLoader,
   };
 
   const admin = new AdminJS(adminJsOptions);
   admin.watch();
-  const router = buildAdminRouter(admin);
+  // const router = buildAdminRouter(admin);
 
-  return {
-    admin: router,
-    options: adminJsOptions,
-  };
+  // return {
+  //   admin: router,
+  //   options: adminJsOptions,
+  // };
+  return buildAdminRouter(admin);
 };
