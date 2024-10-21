@@ -1,6 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import session from "express-session";
+import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
 import { setupAdminJS } from "./utils/admin.js";
 import { setupRoutes } from "./utils/routes.js";
@@ -16,11 +17,12 @@ connectDB()
 
     // Setup AdminJS
     const adminRouter = setupAdminJS();
+    console.log("AdminJS router set up:");
 
     // Create an Express app
     const app = express();
 
-    //session middleware
+    // Session middleware
     app.use(
       session({
         secret: "your-secret-key",
@@ -30,18 +32,23 @@ connectDB()
       })
     );
 
-    // Rate limiter middleware
+    // Apply rate limiter middleware
     const limiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
       max: 100, // limit each IP to 100 requests per windowMs
     });
+    app.use(limiter);
 
-    // Apply rate limiter and route setup
-    app.use(
-      '/admin',
-      limiter,
-      adminRouter
-    );
+    // Apply AdminJS router first
+    app.use(adminRouter.options.rootPath, adminRouter);
+
+    // Apply body-parser middleware after AdminJS
+    app.use(bodyParser.json());
+
+    // Setup other routes
+    const routes = setupRoutes();
+    console.log("Setting up other routes");
+    app.use(routes);
 
     // Log route setup
     app.use((req, res, next) => {
@@ -59,3 +66,5 @@ connectDB()
     console.error(err);
     process.exit(1);
   });
+
+

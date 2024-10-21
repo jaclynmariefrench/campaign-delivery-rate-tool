@@ -52,11 +52,8 @@ export const setupAdminJS = () => {
 
   const admin = new AdminJS(adminJsOptions);
   admin.watch();
-  // const router = buildAdminRouter(admin);
 
-  // return {
-  //   admin: router,
-  //   options: adminJsOptions,
-  // };
-  return buildAdminRouter(admin);
+  const adminRouter = buildAdminRouter(admin);
+
+  return adminRouter;
 };
