@@ -130,6 +130,50 @@ export function setupRoutes() {
     });
   });
 
+    // Route to validate reset token and show the reset form (GET request)
+    router.get("/reset/:token", async (req, res) => {
+      try {
+        const user = await User.findOne({
+          resetPasswordToken: req.params.token,
+          resetPasswordExpires: { $gt: Date.now() }, // check if token is valid
+        });
+  
+        if (!user) {
+          return res.status(400).send("Password reset token is invalid or has expired.");
+        }
+  
+        // If token is valid, proceed to show a form or just return a message for now
+        res.status(200).send("Token is valid. You can reset your password.");
+      } catch (err) {
+        res.status(500).send("Error retrieving user with reset token");
+      }
+    });
+  
+    // Route to handle the password reset form submission (POST request)
+    router.post("/reset/:token", async (req, res) => {
+      try {
+        const user = await User.findOne({
+          resetPasswordToken: req.params.token,
+          resetPasswordExpires: { $gt: Date.now() }, // check if token is valid
+        });
+  
+        if (!user) {
+          return res.status(400).send("Password reset token is invalid or has expired.");
+        }
+  
+        // Set the new password (you might want to hash this password here)
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined; // Clear the reset token
+        user.resetPasswordExpires = undefined; // Clear the expiry date
+  
+        await user.save();
+  
+        res.status(200).send("Password has been reset successfully!");
+      } catch (err) {
+        res.status(500).send("Error resetting password");
+      }
+    });
+
   return router;
 }
 
