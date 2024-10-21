@@ -4,7 +4,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
 import { setupAdminJS } from "./utils/admin.js";
-import { setupRoutes } from "./utils/routes.js";
+import { setupRoutes } from "./routes/index.js";
 
 // Load environment variables
 import dotenv from "dotenv";
