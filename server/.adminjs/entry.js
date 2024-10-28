@@ -7,3 +7,5 @@ import ConditionBadge from '../adminjs/ConditionBadge'
 AdminJS.UserComponents.ConditionBadge = ConditionBadge
 import ConditionShow from '../adminjs/ConditionShow'
 AdminJS.UserComponents.ConditionShow = ConditionShow
+import ResetPasswordForm from '../adminjs/resetPasswordForm'
+AdminJS.UserComponents.ResetPasswordForm = ResetPasswordForm

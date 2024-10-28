@@ -1,56 +1,14 @@
 import express from "express";
-import crypto from "crypto";
-import nodemailer from "nodemailer";
 import { User } from "../models/userSchema.js";
 
 const router = express.Router();
 
-router.post("/reset-password", async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(400).send("User not found");
-  }
-
-  const token = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordToken = token;
-  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour window
-  await user.save();
-
-  // Create Ethereal email account for testing
-  let testAccount = await nodemailer.createTestAccount();
-
-  const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
-
-  const mailOptions = {
-    to: user.email,
-    from: testAccount.user,
-    subject: "Password Reset",
-    text: `Please click on the following link to reset your password: http://${req.headers.host}/reset/${token}`,
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      return res.status(500).send("Error sending email");
-    }
-    console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
-    res.status(200).send("Password reset email sent");
-  });
-});
-
+// Route for verifying token
 router.get("/reset/:token", async (req, res) => {
   try {
     const user = await User.findOne({
       resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }, // check if token is valid
+      resetPasswordExpires: { $gt: Date.now() },
     });
 
     if (!user) {
@@ -63,11 +21,12 @@ router.get("/reset/:token", async (req, res) => {
   }
 });
 
+// Route for resetting the password
 router.post("/reset/:token", async (req, res) => {
   try {
     const user = await User.findOne({
       resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }, // check if token is valid
+      resetPasswordExpires: { $gt: Date.now() },
     });
 
     if (!user) {
@@ -75,8 +34,8 @@ router.post("/reset/:token", async (req, res) => {
     }
 
     user.password = req.body.password;
-    user.resetPasswordToken = undefined; // Clear the reset token
-    user.resetPasswordExpires = undefined; // Clear the expiry date
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
 
     await user.save();
 
