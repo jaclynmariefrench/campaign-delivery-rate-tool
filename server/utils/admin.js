@@ -72,7 +72,6 @@ export const setupAdminJS = () => {
   };
 
   const admin = new AdminJS(adminJsOptions);
-  admin.overrideLogin({ component: Components.CustomLogin});
   admin.watch();
 
   const adminRouter = buildAdminRouter(admin);

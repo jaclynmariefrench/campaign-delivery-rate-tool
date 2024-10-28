@@ -13,4 +13,7 @@ const Components = {
     // other custom components
 }
 
+//override login
+componentLoader.override('Login', './CustomLogin');
+
 export { componentLoader, Components }

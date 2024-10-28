@@ -9,3 +9,7 @@ import ConditionShow from '../adminjs/ConditionShow'
 AdminJS.UserComponents.ConditionShow = ConditionShow
 import ResetPasswordForm from '../adminjs/resetPasswordForm'
 AdminJS.UserComponents.ResetPasswordForm = ResetPasswordForm
+import CustomLogin from '../adminjs/CustomLogin'
+AdminJS.UserComponents.CustomLogin = CustomLogin
+import Login from '../adminjs/CustomLogin'
+AdminJS.UserComponents.Login = Login
