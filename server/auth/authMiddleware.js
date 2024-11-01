@@ -4,6 +4,7 @@ import session from 'express-session';
 import { authenticate } from './auth.js';
 
 export const buildAdminRouter = (adminJs) => {
+    
     //test console
     console.log("building adminjs router");
     const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {

@@ -37,7 +37,7 @@ const resetPasswordAction = {
       text: `Please click on the following link to reset your password: http://localhost:3000/reset/${token}`,
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
     
     console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
     

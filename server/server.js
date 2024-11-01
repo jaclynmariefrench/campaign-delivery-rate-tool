@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
 import { setupAdminJS } from "./utils/admin.js";
 import { setupRoutes } from "./routes/index.js";
+import passwordResetRoutes from "./routes/passwordResetRoutes.js";
 
 // Load environment variables
 import dotenv from "dotenv";
@@ -39,6 +40,9 @@ connectDB()
     });
     app.use(limiter);
 
+    //setup password reset routes before AdminJS router
+    app.use("/admin", passwordResetRoutes);
+
     // Apply AdminJS router first
     app.use(adminRouter.options.rootPath, adminRouter);
 
@@ -50,9 +54,18 @@ connectDB()
     console.log("Setting up other routes");
     app.use(routes);
 
+    // Setup password reset routes
+    app.use("/admin", passwordResetRoutes);
+
     // Log route setup
     app.use((req, res, next) => {
       console.log("Route Path:", req.path);
+      next();
+    });
+
+    // Log all requests
+    app.use((req, res, next) => {
+      console.log(`Received request: ${req.method} ${req.path}`);
       next();
     });
 
@@ -66,5 +79,3 @@ connectDB()
     console.error(err);
     process.exit(1);
   });
-
-

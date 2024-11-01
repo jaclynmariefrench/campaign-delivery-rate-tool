@@ -64,7 +64,6 @@ export const setupAdminJS = () => {
       theme: {
         colors: { primary100: '#0d6efd' },
       },
-      footer: 'Need help? <a href="/admin/reset-password">Forgot Password?</a>',
     },
     rootPath: "/admin",
     componentLoader,

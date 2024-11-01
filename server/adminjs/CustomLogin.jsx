@@ -26,7 +26,7 @@ const CustomLogin = (props) => {
             </Button>
           </form>
           <Text mt="lg">
-            Need help? <a href="/admin/reset-password">Forgot Password?</a>
+            Need help? <a href="/admin/forgot-password">Forgot Password?</a>
           </Text>
         </Box>
       </Box>
