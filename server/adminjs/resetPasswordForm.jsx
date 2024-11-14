@@ -1,46 +1,49 @@
-import React, {useState} from "react";
-import { useParams } from "react-router";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom"; // Ensure you're using 'react-router-dom'
 
 const ResetPasswordForm = () => {
-    const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const { token } = useParams();
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const { token } = useParams();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch(`http://localhost:3000/reset/${token}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({password}),
-            });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:3000/reset/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
 
-            const data = await response.text();
-            setMessage(data);
-        } catch (error) {
-            setMessage("Error sending resetting password");
-        }
-    };
+      const data = await response.text();
+      setMessage(data);
+    } catch (error) {
+      setMessage("Error resetting password");
+    }
+  };
 
-    return (
+  return (
+    <div>
+      <h2>Reset Password</h2>
+      <form onSubmit={handleSubmit}>
         <div>
-            <h2>Reset Password</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>New Password:</label>
-                    <input type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required />
-                </div>
-                <button type="submit">Reset Password</button>
-            </form>
-            {message && <p>{message}</p>}
+          <label>New Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
-    )
+        <button type="submit">Reset Password</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
+  );
 };
 
 export default ResetPasswordForm;
+
 

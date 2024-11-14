@@ -30,5 +30,9 @@
     "react-router-dom": "^6.24.1",
     "styled-components": "^6.1.11",
     "styled-system": "^5.1.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3",
+    "vite": "^5.4.11"
   }
 }
