@@ -27,3 +27,7 @@ pnpm-debug.log*
 
 #hide hardcoded business logic
 hardcodedCal.js
+
+#Auth scripts
+createAdminUser.js
+createTestUser.js
