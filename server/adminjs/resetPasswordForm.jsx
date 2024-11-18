@@ -3,6 +3,12 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
 // Styled components
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  height: 100vh;
+`;
+
 const Box = styled.div`
   background-color: #fff;
   width: 400px;
@@ -10,6 +16,7 @@ const Box = styled.div`
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  grid-row: 2;
 `;
 
 const Button = styled.button`
@@ -44,38 +51,20 @@ const Input = styled.input`
 const Label = styled.label`
   font-size: 16px;
   color: #333;
-  margin-bottom: 8px;
-  display: block;
-`;
-
-const H2 = styled.h2`
-  font-size: 24px;
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
-const Text = styled.p`
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  margin-top: 20px;
 `;
 
 const ResetPasswordForm = () => {
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const { token } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('Submitting...');
-
     try {
-      const response = await fetch(`http://localhost:3000/reset/${token}`, {
-        method: 'POST',
+      const response = await fetch(`/reset/${token}`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ password }),
       });
@@ -83,15 +72,15 @@ const ResetPasswordForm = () => {
       const data = await response.text();
       setMessage(data);
     } catch (error) {
-      setMessage('Error resetting password');
+      setMessage("Error resetting password");
     }
   };
 
   return (
-    <Box>
-      <H2>Reset Password</H2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <Container>
+      <Box>
+        <h2>Reset Password</h2>
+        <form onSubmit={handleSubmit}>
           <Label>New Password:</Label>
           <Input
             type="password"
@@ -99,11 +88,11 @@ const ResetPasswordForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        <Button type="submit">Reset Password</Button>
-      </form>
-      {message && <Text>{message}</Text>}
-    </Box>
+          <Button type="submit">Reset Password</Button>
+        </form>
+        {message && <p>{message}</p>}
+      </Box>
+    </Container>
   );
 };
 
