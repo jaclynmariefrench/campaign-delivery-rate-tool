@@ -5,7 +5,14 @@ import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
 import { setupAdminJS } from "./utils/admin.js";
 import { setupRoutes } from "./routes/index.js";
-import passwordResetRoutes from "./routes/passwordResetRoutes.js";
+import passwordResetRoutes from "./routes/passwordResetRoutes.js"; // Import the password reset routes
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Load environment variables
 import dotenv from "dotenv";
@@ -40,22 +47,23 @@ connectDB()
     });
     app.use(limiter);
 
-    //setup password reset routes before AdminJS router
+    // Apply body-parser middleware
+    app.use(bodyParser.json());
+
+    // Serve static files
+    app.use(express.static(path.join(__dirname, "public")));
+    app.use(express.static(path.join(__dirname, "static"))); // Serve static files from the static directory
+
+    // Setup password reset routes before AdminJS router
     app.use("/admin", passwordResetRoutes);
 
-    // Apply AdminJS router first
+    // Apply AdminJS router
     app.use(adminRouter.options.rootPath, adminRouter);
-
-    // Apply body-parser middleware after AdminJS
-    app.use(bodyParser.json());
 
     // Setup other routes
     const routes = setupRoutes();
     console.log("Setting up other routes");
     app.use(routes);
-
-    // Setup password reset routes
-    app.use("/admin", passwordResetRoutes);
 
     // Log route setup
     app.use((req, res, next) => {
@@ -79,3 +87,5 @@ connectDB()
     console.error(err);
     process.exit(1);
   });
+
+

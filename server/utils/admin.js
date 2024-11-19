@@ -10,6 +10,7 @@ import { buildAdminRouter } from "../auth/authMiddleware.js";
 import resetPasswordAction from "../adminjs/actions/resetPasswordAction.js";
 
 
+
 AdminJS.registerAdapter(AdminJSMongoose);
 
 export const setupAdminJS = () => {
@@ -52,7 +53,11 @@ export const setupAdminJS = () => {
         resource: User, // Add the User resource
         options: {
           actions: {
-            resetPassword: resetPasswordAction, // Add custom action here
+            resetPassword: resetPasswordAction, 
+            resetPasswordForm: {
+              actionType: 'resource',
+              component: Components.ResetPasswordForm,
+            }
           },
         },
       },

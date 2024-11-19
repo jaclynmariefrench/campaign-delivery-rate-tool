@@ -28,7 +28,6 @@ export function setupRoutes() {
   );
 
   router.use((req, res, next) => {
-    console.log("Request Path:", req.path);
     next();
   });
 
