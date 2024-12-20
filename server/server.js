@@ -1,5 +1,4 @@
 import express from "express";
-import rateLimit from "express-rate-limit";
 import session from "express-session";
 import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
@@ -39,13 +38,6 @@ connectDB()
         cookie: { secure: false },
       })
     );
-
-    // Apply rate limiter middleware
-    const limiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
-    });
-    app.use(limiter);
 
     // Apply body-parser middleware
     app.use(bodyParser.json());
