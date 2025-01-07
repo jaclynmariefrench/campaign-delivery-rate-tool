@@ -4,12 +4,13 @@ import { User } from '../../models/userSchema.js';
 
 const resetPasswordAction = {
   actionType: 'resource',
-  handler: async (request, response, context) => {
-    const { email } = request.payload;
+  handler: async (req, res, context) => {
+    console.log("Request Payload:", req.body); // Log the request body
+    const { email } = req.body; // Access req.body instead of request.payload
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error('User not found');
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
 
     // Token generation logic
@@ -41,7 +42,7 @@ const resetPasswordAction = {
     
     console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
     
-    return { message: 'Password reset email sent successfully.' };
+    return res.status(200).json({ success: true, message: 'Password reset email sent successfully.' });
   },
 };
 
