@@ -40,19 +40,16 @@ connectDB()
       })
     );
 
-    // Apply rate limiter middleware
-    const limiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
-    });
-    app.use(limiter);
-
-    // Apply body-parser middleware
-    app.use(bodyParser.json());
-
     // Serve static files
     app.use(express.static(path.join(__dirname, "public")));
     app.use(express.static(path.join(__dirname, "static"))); // Serve static files from the static directory
+
+    // Serve bundled files
+    app.use('/dist', express.static(path.join(__dirname, 'dist'))); // Ensure the correct path
+
+    // Apply body-parser middleware conditionally for password reset routes
+    app.use("/admin/reset-password", bodyParser.json(), bodyParser.urlencoded({ extended: true }));
+    app.use("/admin/reset/:token", bodyParser.json(), bodyParser.urlencoded({ extended: true }));
 
     // Setup password reset routes before AdminJS router
     app.use("/admin", passwordResetRoutes);
@@ -87,5 +84,3 @@ connectDB()
     console.error(err);
     process.exit(1);
   });
-
-
