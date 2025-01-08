@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import { connectDB } from "./models/db.js";
 import { setupAdminJS } from "./utils/admin.js";
 import { setupRoutes } from "./routes/index.js";
-import passwordResetRoutes from "./routes/passwordResetRoutes.js"; 
+import passwordResetRoutes from "./routes/passwordResetRoutes.js"; // Import the password reset routes
 import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -40,16 +40,16 @@ connectDB()
       })
     );
 
-    // Apply body-parser middleware
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-
     // Serve static files
     app.use(express.static(path.join(__dirname, "public")));
-    app.use(express.static(path.join(__dirname, "static"))); 
+    app.use(express.static(path.join(__dirname, "static"))); // Serve static files from the static directory
 
     // Serve bundled files
-    app.use('/dist', express.static(path.join(__dirname, 'dist'))); 
+    app.use('/dist', express.static(path.join(__dirname, 'dist'))); // Ensure the correct path
+
+    // Apply body-parser middleware conditionally for password reset routes
+    app.use("/admin/reset-password", bodyParser.json(), bodyParser.urlencoded({ extended: true }));
+    app.use("/admin/reset/:token", bodyParser.json(), bodyParser.urlencoded({ extended: true }));
 
     // Setup password reset routes before AdminJS router
     app.use("/admin", passwordResetRoutes);
